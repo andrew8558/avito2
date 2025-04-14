@@ -1,3 +1,4 @@
+//go:generate mockgen -source ./jwt.go -destination=./mocks/jwt.go -package=mock_jwt
 package utils
 
 import (

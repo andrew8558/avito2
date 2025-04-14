@@ -71,7 +71,7 @@ type CreatePvzRequest struct {
 type Pvz struct {
 	Id               uuid.UUID `json:"id" db:"id"`
 	RegistrationDate time.Time `json:"registration_date" db:"registration_date"`
-	City             string    `json:"city" db:"city"`
+	City             City      `json:"city" db:"city"`
 }
 
 type Reception struct {
