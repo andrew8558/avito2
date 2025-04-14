@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  avito-shop-service:
+      build: .
+      container_name: avito-pvz-manager
+      ports:
+        - "8080:8080"
+      environment:
+        # адрес подключения к БД
+        - DATABASE_URL=postgres://postgres:password@db:5432/pvz_manager?sslmode=disable
+        # порт сервиса
+        - SERVER_PORT=8080
+        # jwt-секрет для генерации токенов
+        - JWT_SECRET=Fy5W4qeOKhWTiCflUnk1JTUqjNGcj/0zkFMSEClgjIg=
+      depends_on:
+        db:
+            condition: service_healthy
+      networks:
+        - internal
+  
+  db:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pvz_manager
+    volumes:
+      - ./migrations:/app/internal/db/migrations
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgres -d pvz_manager'"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+      - internal
+networks:
+  internal:
+
